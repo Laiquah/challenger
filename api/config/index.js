@@ -1,3 +1,4 @@
+
 require("dotenv").config()
 const {createPool} = require("mysql")
 const connection = createPool({
@@ -12,3 +13,5 @@ const connection = createPool({
 module.exports = {
     connection
 }
+
+
