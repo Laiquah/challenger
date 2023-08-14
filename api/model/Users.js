@@ -1,4 +1,8 @@
 const db = require("../config")
+const {hash, compare, hashSync} = require ('bcrypt')
+//hash, compare, hashSync from bcrypt
+//createToken from middleware
+const {createToken} = require('../middleware/AuthenticateUser')
 
 class Users {
     fetchUsers(req, res) {
@@ -35,8 +39,33 @@ class Users {
 
     }
 
-    register(req, res) {
-
+    async register(req, res) {
+        const data = req.body
+        // Encrypt password
+        data.userPass = await hash(data.userPass, 15)
+        // Payload
+        const user = {
+            emailAdd: data.emailAdd,
+            userPass: data.userPass
+        }
+        //query
+        const query = `
+        INSERT INTO Users
+        SET ?
+        `
+        db.query(query, [data], (err) => {
+            if (err) throw err
+            //create token
+            let token = createToken(user)
+            res.cookie("LegitUser", token, {
+                maxAge: 3600000,
+                httpOnly: true
+            })
+            res.json({
+                status: res.statusCode,
+                msg: "You are now registered."
+            })
+        })
     }
 
     updateUser(req, res) {
