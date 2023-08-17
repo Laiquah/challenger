@@ -2,13 +2,14 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const {verifyAToken} = require('../middleware/AuthenticateUser')
 const routes = express.Router()
 
 //import all model's objects
-const {users} = require('../model')
+const {users, books, bookauthor, orders} = require('../model')
 
 //=======user's router=========
-routes.get('/users', (req, res) => {
+routes.get('/users',(req, res) => {
     users.fetchUsers(req, res)
 })
 
@@ -88,5 +89,6 @@ routes.delete("/order/:orderID", (req, res)=>{
 
 module.exports = {
     express,
-    routes
+    routes,
+    verifyAToken
 }

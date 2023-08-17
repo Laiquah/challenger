@@ -1,4 +1,3 @@
-
 // const express = require("express");
 // const app = express();
 // const path = require("path");
@@ -186,9 +185,16 @@ const app = express();
 app.use(express.static("./static"));
 
 app.use(express.urlencoded({ extended: false }), routes);
-routes.get("^/$|/challenger", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./static/html/index.html"));
-});
+
+routes.get(
+  "^/$|/challenger",
+  (req, res, next) => {
+    console.log("welcome back");
+  },
+  (req, res) => {
+    res.sendFile(path.resolve(__dirname, "./static/html/index.html"));
+  }
+);
 
 app.listen(port, () => {
   console.log(`You are listening on port ${port}`);
